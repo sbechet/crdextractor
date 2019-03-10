@@ -47,7 +47,7 @@ class Crd(object):
                 text = f.read(40)
                 text = text.decode('cp1252')
                 text = text.split('\0', 1)[0]
-                self.entries[text] = pos
+                self.entries[text.strip()] = pos
                 f.seek(1, 1)
             for key, seek in self.entries.items():
                 f.seek(seek, 0)
@@ -57,7 +57,7 @@ class Crd(object):
                     value = f.read(lot)
                     value = value.decode('cp1252')
                     value = value.replace('\r\n', '\n')
-                    self.entries[key] = value
+                    self.entries[key] = value.strip()
                 else:
                     print('erreur lob=', lob, ' pour un seek=', seek)
         finally:
@@ -78,13 +78,12 @@ class Crd(object):
         text += '</body></html>'
         return text
 
-    def toText(self):
+    def toMarkdown(self):
         entries2 = OrderedDict(sorted(self.entries.items()))
         text = ''
         for key, value in entries2.items():
-            text += key + '\n'
-            text += '-'*len(key) + '\n\n'
-            text += value + '\n\n\n'
+            text += '# ' + key + '\n\n'
+            text += '```\n' + value + '\n```' + '\n\n\n'
         return text
 
 
@@ -100,4 +99,4 @@ if __name__ == '__main__':
             tout.update(crd.entries)
         crd = Crd()
         crd.entries = tout
-        print(crd.toText())
+        print(crd.toMarkdown())

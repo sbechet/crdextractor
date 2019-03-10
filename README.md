@@ -1,5 +1,5 @@
 *.CRD File extractor
 ====================
 
-To extract `*.CRD` data from old `CARDFILE.EXE`.
+To convert `*.CRD` data from old `CARDFILE.EXE` to [Markdown](https://fr.wikipedia.org/wiki/Markdown) files.
 
