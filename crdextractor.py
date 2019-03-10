@@ -12,11 +12,12 @@
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
 
-import sys, os
+import sys
 from collections import OrderedDict
 
-#import pdb
+# import pdb
 # breakpoint: pdb.set_trace()
+
 
 # Only MGC at this time
 class Crd(object):
@@ -40,16 +41,16 @@ class Crd(object):
                 return False
             self.quantity = int.from_bytes(f.read(2), byteorder='little')
             for i in range(self.quantity):
-                f.seek(6,1)
+                f.seek(6, 1)
                 pos = int.from_bytes(f.read(4), byteorder='little')
-                f.seek(1,1)
+                f.seek(1, 1)
                 text = f.read(40)
                 text = text.decode('cp1252')
-                text = text.split('\0',1)[0]
+                text = text.split('\0', 1)[0]
                 self.entries[text] = pos
-                f.seek(1,1)
+                f.seek(1, 1)
             for key, seek in self.entries.items():
-                f.seek(seek,0)
+                f.seek(seek, 0)
                 lob = int.from_bytes(f.read(2), byteorder='little')
                 if lob == 0:
                     lot = int.from_bytes(f.read(2), byteorder='little')
@@ -58,7 +59,7 @@ class Crd(object):
                     value = value.replace('\r\n', '\n')
                     self.entries[key] = value
                 else:
-                    print('erreur lob=', lob,' pour un seek=',seek)
+                    print('erreur lob=', lob, ' pour un seek=', seek)
         finally:
             f.close()
 
@@ -68,7 +69,7 @@ class Crd(object):
         text += '<html lang="fr">'
         text += '<head>'
         text += '<meta charset="utf-8">'
-        text += '<title>' + self.filename +'</title>'
+        text += '<title>' + self.filename + '</title>'
         text += '</head>'
         text += '<body>'
         for key, value in entries2.items():
@@ -86,6 +87,7 @@ class Crd(object):
             text += value + '\n\n\n'
         return text
 
+
 if __name__ == '__main__':
     tout = {}
     if len(sys.argv) < 2:
@@ -99,4 +101,3 @@ if __name__ == '__main__':
         crd = Crd()
         crd.entries = tout
         print(crd.toText())
-
