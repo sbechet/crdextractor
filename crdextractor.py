@@ -47,7 +47,7 @@ class Crd(object):
                 text = f.read(40)
                 text = text.decode('cp1252')
                 text = text.split('\0', 1)[0]
-                self.entries[text.strip()] = pos
+                self.entries[text.strip().title()] = pos
                 f.seek(1, 1)
             for key, seek in self.entries.items():
                 f.seek(seek, 0)
@@ -90,7 +90,7 @@ class Crd(object):
 if __name__ == '__main__':
     tout = {}
     if len(sys.argv) < 2:
-        print('Usage : ', sys.argv[0], ' filename.crd')
+        print('Usage : ', sys.argv[0], ' <filename.crd> ...')
     else:
         nb = len(sys.argv) - 1
         for i in range(nb):
